@@ -1,4 +1,10 @@
 <html>
+  <head>
+  <style>
+      body {background-color: #222; display: grid; grid-template-columns: 50% 50%; grid-template-rows: 50% 50%; margin: 0; }
+      video {justify-self: center; align-self: center;}
+  </style>
+  </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <video id="video1" controls muted></video>
@@ -8,6 +14,7 @@
     <script>
     function loadVideo(videoId, url) {
         var video = document.getElementById(videoId);
+        video.setAttribute('width', video.parentElement.clientWidth/2);
         var hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
