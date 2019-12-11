@@ -42,12 +42,10 @@
         video.setAttribute('height', height);
         video.setAttribute('id', videoId);
         video.muted ="muted";
-        video.setAttribute('controls', "controls");
         var hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
         hls.on(Hls.Events.MEDIA_ATTACHED,function() {
-          // try {video.play()} catch {}
             video.play();
         });
         video.onclick = function () {
