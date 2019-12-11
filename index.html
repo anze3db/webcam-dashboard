@@ -8,37 +8,76 @@
   </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <content>
-      <video id="video1" muted></video>
-      <video id="video2" muted></video>
-      <video id="video3" muted></video>
-      <video id="video4" muted></video>
-      <video id="video5" muted></video>
-      <video id="video6" muted></video>
+    <content id="videos">
     </content>
     <footer>
       <button onclick="javascript:location.reload()">Reload</button>
-      <button onclick="javascript:exitFullscreen()">X</button>
     </footer>
     <script>
+    var selectedVideo = null;
+    var cams = [
+        "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8",
+        "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8",
+        "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8",
+        "https://video-auth1.iol.pt/beachcam/costacaparicacds/chunks.m3u8",
+        "https://video-auth1.iol.pt/beachcam/saopedroestoria/chunks.m3u8",
+        "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8",
+    ]
+    var videos = []
     function loadVideo(videoId, url) {
-        var video = document.getElementById(videoId);
-        video.setAttribute('width', video.parentElement.clientWidth/2);
-        video.setAttribute('height', video.parentElement.clientHeight/3);
+        
+        if (selectedVideo && selectedVideo !== videoId) {
+          return;
+        }
+        var container = document.getElementById("videos");
+        var video = document.createElement('video');
+        container.appendChild(video)
+        width = video.parentElement.clientWidth;
+        height = video.parentElement.clientHeight;
+        if (!selectedVideo){ 
+          width = width / 2;
+          height = height / 3;
+        }
+        video.setAttribute('width', width);
+        video.setAttribute('height', height);
+        video.setAttribute('id', videoId);
+        video.muted ="muted";
+        video.setAttribute('controls', "controls");
         var hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
-        hls.on(Hls.Events.MEDIA_ATTACHED,function()
-        {
+        hls.on(Hls.Events.MEDIA_ATTACHED,function() {
+          // try {video.play()} catch {}
             video.play();
         });
+        video.onclick = function () {
+            if (selectedVideo) {
+              selectedVideo = null;
+            } else {
+              selectedVideo = this.id;
+            }
+            loadVideos();
+        }
+        videos.push(hls)
+        
     }
-    loadVideo("video1", "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8")
-    loadVideo("video2", "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8")
-    loadVideo("video3", "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8")
-    loadVideo("video4", "https://video-auth1.iol.pt/beachcam/costacaparicacds/chunks.m3u8")
-    loadVideo("video5", "https://video-auth1.iol.pt/beachcam/saopedroestoria/chunks.m3u8")
-    loadVideo("video6", "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8")
+    function loadVideos() {
+      unloadVideos();
+      cams.forEach((url, i) => {
+        loadVideo("video" + i, url);
+      });
+      
+    }
+    function unloadVideos() {
+      videos.forEach((hls, i) => {
+        hls.destroy()
+      });
+      videos = [];
+      var container = document.getElementById("videos")
+      container.innerHTML = ''
+      ;
+    }
+    loadVideos();
     </script>
   </body>
 </html>
