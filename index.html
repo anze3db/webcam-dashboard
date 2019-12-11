@@ -1,7 +1,7 @@
 <html>
   <head>
   <style>
-      body {background-color: #222; display: grid; grid-template-columns: 50% 50%; grid-template-rows: 50% 50%; margin: 0; overflow:hidden; }
+      body {background-color: #222; display: grid; grid-template-columns: 50% 50%; grid-template-rows: 33% 33% 33%; margin: 0; overflow:hidden; }
       video {justify-self: center; align-self: center;}
   </style>
   </head>
@@ -11,10 +11,13 @@
     <video id="video2" controls muted></video>
     <video id="video3" controls muted></video>
     <video id="video4" controls muted></video>
+    <video id="video5" controls muted></video>
+    <video id="video6" controls muted></video>
     <script>
     function loadVideo(videoId, url) {
         var video = document.getElementById(videoId);
         video.setAttribute('width', video.parentElement.clientWidth/2);
+        video.setAttribute('height', video.parentElement.clientHeight/3);
         var hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -27,6 +30,8 @@
     loadVideo("video2", "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8")
     loadVideo("video3", "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8")
     loadVideo("video4", "https://video-auth1.iol.pt/beachcam/costacaparicacds/chunks.m3u8")
+    loadVideo("video5", "https://video-auth1.iol.pt/beachcam/saopedroestoria/chunks.m3u8")
+    loadVideo("video6", "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8")
     </script>
   </body>
 </html>
