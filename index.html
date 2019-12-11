@@ -1,18 +1,24 @@
 <html>
   <head>
   <style>
-      body {background-color: #000; display: grid; grid-template-columns: 50% 50%; grid-template-rows: 33% 33% 33%; margin: 0; overflow:hidden; }
-      video {justify-self: center; align-self: center;}
+      body {margin: 0; overflow:hidden;}
+      content {background-color: #000; display: grid; height: 100%; grid-template-columns: 50% 50%; grid-template-rows: 33% 33% 33%;  }
+      footer {position: absolute; bottom: 0; left: 0;}
   </style>
   </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <video id="video1" muted></video>
-    <video id="video2" muted></video>
-    <video id="video3" muted></video>
-    <video id="video4" muted></video>
-    <video id="video5" muted></video>
-    <video id="video6" muted></video>
+    <content>
+      <video id="video1" muted></video>
+      <video id="video2" muted></video>
+      <video id="video3" muted></video>
+      <video id="video4" muted></video>
+      <video id="video5" muted></video>
+      <video id="video6" muted></video>
+    </content>
+    <footer>
+      <button onclick="javascript:location.reload()">Reload</button>
+    </footer>
     <script>
     function loadVideo(videoId, url) {
         var video = document.getElementById(videoId);
