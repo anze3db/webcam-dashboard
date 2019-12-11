@@ -2,7 +2,8 @@
   <head>
   <style>
       body {margin: 0; overflow:hidden;}
-      content {background-color: #000; display: grid; height: 100%; grid-template-columns: 50% 50%; grid-template-rows: 33% 33% 33%;  }
+      content {cursor: none; background-color: #000; display: grid; height: 100%; grid-template-columns: 50% 50%; grid-template-rows: 33% 33% 33%;  }
+      content.active {cursor: default;}
       footer {position: absolute; bottom: 0; left: 0;}
   </style>
   </head>
@@ -14,6 +15,19 @@
       <button onclick="javascript:location.reload()">Reload</button>
     </footer>
     <script>
+    var mouse_move_timeout = null;
+    document.onmousemove = function () {
+      var container = document.getElementById("videos");
+      container.classList.add("active");
+      if (mouse_move_timeout) {
+        clearTimeout(mouse_move_timeout)
+      }
+      mouse_move_timeout = setTimeout(function() {
+        container.classList.remove("active");
+        mouse_move_timeout = null;
+      }, 3000)
+      console.log("moving")
+    }
     var selectedVideo = null;
     var cams = [
         "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8",
@@ -72,8 +86,7 @@
       });
       videos = [];
       var container = document.getElementById("videos")
-      container.innerHTML = ''
-      ;
+      container.innerHTML = '';
     }
     loadVideos();
     </script>
