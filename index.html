@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <video id="video1" controls muted></video>
+    <video id="video2" controls muted></video>
+    <video id="video3" controls muted></video>
+    <video id="video4" controls muted></video>
+    <script>
+    function loadVideo(videoId, url) {
+        var video = document.getElementById(videoId);
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MEDIA_ATTACHED,function()
+        {
+            video.play();
+        });
+    }
+    loadVideo("video1", "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8")
+    loadVideo("video2", "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8")
+    loadVideo("video3", "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8")
+    loadVideo("video4", "https://video-auth1.iol.pt/beachcam/costacaparicacds/chunks.m3u8")
+    </script>
+  </body>
+</html>
