@@ -16,7 +16,7 @@
     </footer>
     <script>
     var mouse_move_timeout = null;
-    document.onmousemove = function () {
+    function timeoutCursor() {
       var container = document.getElementById("videos");
       container.classList.add("active");
       if (mouse_move_timeout) {
@@ -25,9 +25,10 @@
       mouse_move_timeout = setTimeout(function() {
         container.classList.remove("active");
         mouse_move_timeout = null;
-      }, 3000)
-      console.log("moving")
+      }, 3000);
     }
+    document.onmousemove = timeoutCursor
+
     var selectedVideo = null;
     var cams = [
         "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8",
@@ -78,6 +79,7 @@
       cams.forEach((url, i) => {
         loadVideo("video" + i, url);
       });
+      timeoutCursor()
       
     }
     function unloadVideos() {
