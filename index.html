@@ -12,9 +12,22 @@
     <content id="videos">
     </content>
     <footer>
-      <button onclick="javascript:location.reload()">Reload</button>
+      <button onclick="javascript:full_screen()">Full Screen</button>
     </footer>
     <script>
+    
+    var is_full_screen;
+    document.addEventListener("fullscreenchange", function (event) {
+        is_full_screen = document.fullscreenElement;
+    });
+    function full_screen(){
+      if (is_full_screen) {
+          document.exitFullscreen();
+      } else {
+          document.documentElement.requestFullscreen();
+      }
+    }
+    
     var mouse_move_timeout = null;
     function timeoutCursor() {
       var container = document.getElementById("videos");
