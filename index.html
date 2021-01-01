@@ -22,8 +22,25 @@
 
     footer {
       position: absolute;
+      cursor: pointer;
       bottom: 0;
       left: 0;
+    }
+
+    footer>div {
+      height: 100px;
+      width: 100vw;
+      background-color: black;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      opacity: 0.5;
+    }
+
+    footer>div.active {
+      display: flex;
     }
   </style>
 </head>
@@ -33,7 +50,7 @@
   <content id="videos">
   </content>
   <footer>
-    <button onclick="javascript:full_screen()">Full Screen</button>
+    <div id="fullscreen" onclick="javascript:full_screen()">Full Screen</div>
   </footer>
   <script>
 
@@ -55,12 +72,16 @@
     var mouse_move_timeout = null;
     function timeoutCursor() {
       var container = document.getElementById("videos");
+      var footer = document.getElementById("fullscreen");
       container.classList.add("active");
+      footer.classList.add("active");
+
       if (mouse_move_timeout) {
         clearTimeout(mouse_move_timeout)
       }
       mouse_move_timeout = setTimeout(function () {
         container.classList.remove("active");
+        footer.classList.remove("active");
         mouse_move_timeout = null;
       }, 3000);
     }
