@@ -1,33 +1,57 @@
 <html>
-  <head>
+
+<head>
   <style>
-      body {margin: 0; overflow:hidden;}
-      content {cursor: none; background-color: #000; display: grid; height: 100%; grid-template-columns: 50% 50%; grid-template-rows: 33% 33% 33%;  }
-      content.active {cursor: default;}
-      footer {position: absolute; bottom: 0; left: 0;}
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    content {
+      cursor: none;
+      background-color: #000;
+      display: grid;
+      height: 100%;
+      grid-template-columns: 50% 50%;
+      grid-template-rows: 33% 33% 33%;
+    }
+
+    content.active {
+      cursor: default;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
   </style>
-  </head>
-  <body>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <content id="videos">
-    </content>
-    <footer>
-      <button onclick="javascript:full_screen()">Full Screen</button>
-    </footer>
-    <script>
-    
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <content id="videos">
+  </content>
+  <footer>
+    <button onclick="javascript:full_screen()">Full Screen</button>
+  </footer>
+  <script>
+
     var is_full_screen;
     document.addEventListener("fullscreenchange", function (event) {
-        is_full_screen = document.fullscreenElement;
+      is_full_screen = document.fullscreenElement;
     });
-    function full_screen(){
+    window.addEventListener('resize', function (event) {
+      loadVideos()
+    });
+    function full_screen() {
       if (is_full_screen) {
-          document.exitFullscreen();
+        document.exitFullscreen();
       } else {
-          document.documentElement.requestFullscreen();
+        document.documentElement.requestFullscreen();
       }
     }
-    
+
     var mouse_move_timeout = null;
     function timeoutCursor() {
       var container = document.getElementById("videos");
@@ -35,7 +59,7 @@
       if (mouse_move_timeout) {
         clearTimeout(mouse_move_timeout)
       }
-      mouse_move_timeout = setTimeout(function() {
+      mouse_move_timeout = setTimeout(function () {
         container.classList.remove("active");
         mouse_move_timeout = null;
       }, 3000);
@@ -44,48 +68,48 @@
 
     var selectedVideo = null;
     var cams = [
-        "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8",
-        "https://cams.cdn-surfline.com/cdn-int/pt-costacaparica/chunklist.m3u8",
-        "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8",
-        "https://video-auth1.iol.pt/beachcam/fozdolizandro/chunks.m3u8",
-        "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8",
-        "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8",
+      "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8",
+      "https://cams.cdn-surfline.com/cdn-int/pt-costacaparica/chunklist.m3u8",
+      "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8",
+      "https://video-auth1.iol.pt/beachcam/fozdolizandro/chunks.m3u8",
+      "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8",
+      "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8",
     ]
     var videos = []
     function loadVideo(videoId, url) {
-        
-        if (selectedVideo && selectedVideo !== videoId) {
-          return;
+
+      if (selectedVideo && selectedVideo !== videoId) {
+        return;
+      }
+      var container = document.getElementById("videos");
+      var video = document.createElement('video');
+      container.appendChild(video)
+      width = video.parentElement.clientWidth;
+      height = video.parentElement.clientHeight;
+      if (!selectedVideo) {
+        width = width / 2;
+        height = height / 3;
+      }
+      video.setAttribute('width', width);
+      video.setAttribute('height', height);
+      video.setAttribute('id', videoId);
+      video.muted = "muted";
+      var hls = new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+        video.play();
+      });
+      video.onclick = function () {
+        if (selectedVideo) {
+          selectedVideo = null;
+        } else {
+          selectedVideo = this.id;
         }
-        var container = document.getElementById("videos");
-        var video = document.createElement('video');
-        container.appendChild(video)
-        width = video.parentElement.clientWidth;
-        height = video.parentElement.clientHeight;
-        if (!selectedVideo){ 
-          width = width / 2;
-          height = height / 3;
-        }
-        video.setAttribute('width', width);
-        video.setAttribute('height', height);
-        video.setAttribute('id', videoId);
-        video.muted ="muted";
-        var hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MEDIA_ATTACHED,function() {
-            video.play();
-        });
-        video.onclick = function () {
-            if (selectedVideo) {
-              selectedVideo = null;
-            } else {
-              selectedVideo = this.id;
-            }
-            loadVideos();
-        }
-        videos.push(hls)
-        
+        loadVideos();
+      }
+      videos.push(hls)
+
     }
     function loadVideos() {
       unloadVideos();
@@ -93,7 +117,7 @@
         loadVideo("video" + i, url);
       });
       timeoutCursor()
-      
+
     }
     function unloadVideos() {
       videos.forEach((hls, i) => {
@@ -104,6 +128,7 @@
       container.innerHTML = '';
     }
     loadVideos();
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>
