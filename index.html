@@ -19,30 +19,6 @@
     content.active {
       cursor: default;
     }
-
-    footer {
-      position: absolute;
-      cursor: pointer;
-      bottom: 0;
-      left: 0;
-    }
-
-    footer>div {
-      height: 100px;
-      width: 100vw;
-      background-color: black;
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      color: white;
-      opacity: 0.5;
-      font-family: sans-serif;
-    }
-
-    footer>div.active {
-      display: flex;
-    }
   </style>
 </head>
 
@@ -50,19 +26,13 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <content id="videos">
   </content>
-  <footer>
-    <div id="fullscreen" onclick="javascript:full_screen()">Full Screen</div>
-  </footer>
   <script>
 
     var is_full_screen;
     document.addEventListener("fullscreenchange", function (event) {
       is_full_screen = document.fullscreenElement;
     });
-    window.addEventListener('resize', function (event) {
-      loadVideos()
-    });
-    function full_screen() {
+    function fullScreen() {
       if (is_full_screen) {
         document.exitFullscreen();
       } else {
@@ -70,19 +40,20 @@
       }
     }
 
+    window.addEventListener('resize', function (event) {
+      loadVideos()
+    });
+
     var mouse_move_timeout = null;
     function timeoutCursor() {
       var container = document.getElementById("videos");
-      var footer = document.getElementById("fullscreen");
       container.classList.add("active");
-      footer.classList.add("active");
 
       if (mouse_move_timeout) {
         clearTimeout(mouse_move_timeout)
       }
       mouse_move_timeout = setTimeout(function () {
         container.classList.remove("active");
-        footer.classList.remove("active");
         mouse_move_timeout = null;
       }, 3000);
     }
@@ -122,13 +93,23 @@
       hls.on(Hls.Events.MEDIA_ATTACHED, function () {
         video.play();
       });
-      video.onclick = function () {
-        if (selectedVideo) {
-          selectedVideo = null;
+      var timeout;
+      video.onclick = function (ev) {
+        if (ev.detail === 1) {
+          timeout = setTimeout(() => {
+            if (selectedVideo) {
+              selectedVideo = null;
+            } else {
+              selectedVideo = this.id;
+            }
+            loadVideos();
+          }, 300);
         } else {
-          selectedVideo = this.id;
+          clearTimeout(timeout)
+          fullScreen()
+          timeout = null;
         }
-        loadVideos();
+
       }
       videos.push(hls)
 
