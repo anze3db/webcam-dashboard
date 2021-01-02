@@ -16,6 +16,21 @@
       grid-template-rows: 33% 33% 33%;
     }
 
+    #videos>div {
+      position: relative;
+    }
+
+    #videos description {
+      color: white;
+      position: absolute;
+      background-color: black;
+      opacity: 0.5;
+      padding: 5px;
+      bottom: 20px;
+      left: 30px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
     content.active {
       cursor: default;
     }
@@ -61,24 +76,31 @@
 
     var selectedVideo = null;
     var cams = [
-      "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8",
-      "https://cams.cdn-surfline.com/cdn-int/pt-costacaparica/chunklist.m3u8",
-      "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8",
-      "https://video-auth1.iol.pt/beachcam/fozdolizandro/chunks.m3u8",
-      "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8",
-      "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8",
+      { url: "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8", name: "Carcavelos" },
+      { url: "https://cams.cdn-surfline.com/cdn-int/pt-costacaparica/chunklist.m3u8", name: "Costa" },
+      { url: "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8", name: "Guincho" },
+      { url: "https://video-auth1.iol.pt/beachcam/fozdolizandro/chunks.m3u8", name: "Foz" },
+      { url: "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8", name: "Ribeira" },
+      { url: "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8", name: "Lagide" },
     ]
     var videos = []
-    function loadVideo(videoId, url) {
+    function loadVideo(videoId, url, name) {
 
       if (selectedVideo && selectedVideo !== videoId) {
         return;
       }
       var container = document.getElementById("videos");
+      var cont = document.createElement('div');
+      container.appendChild(cont)
       var video = document.createElement('video');
-      container.appendChild(video)
-      width = video.parentElement.clientWidth;
-      height = video.parentElement.clientHeight;
+      var title = document.createElement('description');
+      cont.appendChild(title)
+      cont.appendChild(video)
+
+      title.textContent = name;
+
+      width = container.clientWidth;
+      height = container.clientHeight;
       if (!selectedVideo) {
         width = width / 2;
         height = height / 3;
@@ -116,8 +138,8 @@
     }
     function loadVideos() {
       unloadVideos();
-      cams.forEach((url, i) => {
-        loadVideo("video" + i, url);
+      cams.forEach((video, i) => {
+        loadVideo("video" + i, video.url, video.name);
       });
       timeoutCursor()
 
