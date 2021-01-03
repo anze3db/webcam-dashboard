@@ -1,0 +1,15 @@
+{
+    "background_color": "black",
+    "description": "Webcams",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "wave192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "name": "Webcams",
+    "short_name": "Webcams",
+    "start_url": "/"
+}
