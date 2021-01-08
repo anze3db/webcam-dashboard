@@ -21,10 +21,14 @@
     }
 
     content>div {
-      flex: 0.5;
+      flex: 1;
     }
 
-    content>div:nth-child(odd) {
+    content>div.center {
+      text-align: center;
+    }
+
+    content>div.right {
       text-align: right;
     }
 
@@ -92,8 +96,8 @@
       { url: "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8", name: "Lagide" },
     ]
     var videos = []
-    function loadVideo(videoId, url, name) {
-
+    function loadVideo(id, url, name) {
+      const videoId = "video" + id;
       if (selectedVideo && selectedVideo !== videoId) {
         return;
       }
@@ -116,9 +120,17 @@
         height = wHeight / 3;
         width = height * 1.77952756;
 
+        if (id % 2 === 0 && width * 3 > wWidth) {
+          cont.classList = "right";
+        }
         if (width * 2 > wWidth) {
           width = wWidth / 2;
           height = width / 1.77952756;
+          if (height < wHeight / 6) {
+            height = wHeight / 6;
+            width = height * 1.77952756;
+            cont.classList = "center";
+          }
         }
       } else {
         width = wWidth;
@@ -158,7 +170,7 @@
     function loadVideos() {
       unloadVideos();
       cams.forEach((video, i) => {
-        loadVideo("video" + i, video.url, video.name);
+        loadVideo(i, video.url, video.name);
       });
       timeoutCursor()
 
