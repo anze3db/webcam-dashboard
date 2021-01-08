@@ -119,8 +119,9 @@
 
         height = wHeight / 3;
         width = height * 1.77952756;
-
-        if (id % 2 === 0 && width * 3 > wWidth) {
+        if (width * 3 < wWidth) {
+          cont.classList = "center";
+        } else if (id % 2 === 0) {
           cont.classList = "right";
         }
         if (width * 2 > wWidth) {
