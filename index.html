@@ -7,29 +7,35 @@
     body {
       margin: 0;
       overflow: hidden;
+      background-color: #000;
     }
 
     content {
       cursor: none;
-      background-color: #000;
-      display: grid;
-      height: 100%;
-      grid-template-columns: 50% 50%;
-      grid-template-rows: 33% 33% 33%;
+      display: flex;
+      flex-wrap: wrap;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
     }
 
-    #videos>div {
-      position: relative;
+    content>div {
+      flex: 0.5;
     }
 
-    #videos description {
+    content>div:nth-child(odd) {
+      text-align: right;
+    }
+
+    content description {
       color: white;
-      position: absolute;
+      position: fixed;
       background-color: black;
-      opacity: 0.5;
+      opacity: 0.9;
       padding: 5px;
-      bottom: 20px;
-      left: 30px;
+      margin: 10px 10px;
+      border-radius: 4px;
       font-family: Arial, Helvetica, sans-serif;
     }
 
@@ -79,9 +85,9 @@
     var selectedVideo = null;
     var cams = [
       { url: "https://video-auth1.iol.pt/beachcam/carcavelos/chunks.m3u8", name: "Carcavelos" },
-      { url: "https://cams.cdn-surfline.com/cdn-int/pt-costacaparica/chunklist.m3u8", name: "Costa" },
+      { url: "https://cams.cdn-surfline.com/cdn-int/pt-costacaparica/chunklist.m3u8", name: "Costa de Caparica" },
       { url: "https://video-auth1.iol.pt/beachcam/praiaguinchosul/chunks.m3u8", name: "Guincho" },
-      { url: "https://video-auth1.iol.pt/beachcam/fozdolizandro/chunks.m3u8", name: "Foz" },
+      { url: "https://video-auth1.iol.pt/beachcam/fozdolizandro/chunks.m3u8", name: "Foz do Lizandro" },
       { url: "https://video-auth1.iol.pt/beachcam/bcmafraribeira/chunks.m3u8", name: "Ribeira" },
       { url: "https://video-auth1.iol.pt/beachcam/lagide/chunks.m3u8", name: "Lagide" },
     ]
@@ -101,11 +107,22 @@
 
       title.textContent = name;
 
-      width = container.clientWidth;
-      height = container.clientHeight;
+      const wWidth = window.innerWidth;
+      const wHeight = window.innerHeight;
+      let height;
+      let width;
       if (!selectedVideo) {
-        width = width / 2;
-        height = height / 3;
+
+        height = wHeight / 3;
+        width = height * 1.77952756;
+
+        if (width * 2 > wWidth) {
+          width = wWidth / 2;
+          height = width / 1.77952756;
+        }
+      } else {
+        width = wWidth;
+        height = wHeight;
       }
       video.setAttribute('width', width);
       video.setAttribute('height', height);
