@@ -149,12 +149,21 @@
       video.setAttribute('height', height);
       video.setAttribute('id', videoId);
       video.muted = "muted";
-      var hls = new Hls();
-      hls.loadSource(url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-        video.play();
-      });
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+          video.play();
+        });
+      } else {
+        console.info("Hello")
+        video.src = url;
+        video.addEventListener('loadedmetadata', function () {
+          video.play();
+        });
+      }
+
       var timeout;
       video.onclick = function (ev) {
         if (ev.detail === 1) {
