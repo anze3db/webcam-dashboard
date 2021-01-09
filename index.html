@@ -55,6 +55,39 @@
   </content>
   <script>
 
+    function getVideoWidthAndHeight(fullScreen, cont, id) {
+      if (fullScreen) {
+        return [window.innerWidth, window.innerHeight];
+      }
+
+      const wWidth = window.innerWidth;
+      const wHeight = window.innerHeight;
+      let height;
+      let width;
+
+      height = wHeight / 3;
+      width = height * 1.77952756;
+      if (width * 3 < wWidth) {
+        cont.classList = "center";
+        height = wHeight / 2;
+        width = wWidth / 3;
+
+        console.log("sss")
+      } else if (id % 2 === 0) {
+        cont.classList = "right";
+      }
+      if (width * 2 > wWidth) {
+        width = wWidth / 2;
+        height = width / 1.77952756;
+        if (height < wHeight / 6) {
+          height = wHeight / 6;
+          width = height * 1.77952756;
+          cont.classList = "center";
+        }
+      }
+      return [width, height];
+    }
+
     var is_full_screen;
     document.addEventListener("fullscreenchange", function (event) {
       is_full_screen = document.fullscreenElement;
@@ -111,32 +144,7 @@
 
       title.textContent = name;
 
-      const wWidth = window.innerWidth;
-      const wHeight = window.innerHeight;
-      let height;
-      let width;
-      if (!selectedVideo) {
-
-        height = wHeight / 3;
-        width = height * 1.77952756;
-        if (width * 3 < wWidth) {
-          cont.classList = "center";
-        } else if (id % 2 === 0) {
-          cont.classList = "right";
-        }
-        if (width * 2 > wWidth) {
-          width = wWidth / 2;
-          height = width / 1.77952756;
-          if (height < wHeight / 6) {
-            height = wHeight / 6;
-            width = height * 1.77952756;
-            cont.classList = "center";
-          }
-        }
-      } else {
-        width = wWidth;
-        height = wHeight;
-      }
+      [width, height] = getVideoWidthAndHeight(selectedVideo, cont, id);
       video.setAttribute('width', width);
       video.setAttribute('height', height);
       video.setAttribute('id', videoId);
