@@ -134,11 +134,12 @@
       if (selectedVideo && selectedVideo !== videoId) {
         return;
       }
-      var container = document.getElementById("videos");
-      var cont = document.createElement('div');
+      const container = document.getElementById("videos");
+      const cont = document.createElement('div');
       container.appendChild(cont)
-      var video = document.createElement('video');
-      var title = document.createElement('description');
+      const video = document.createElement('video');
+      const title = document.createElement('description');
+      let hls = {};
       cont.appendChild(title)
       cont.appendChild(video)
 
@@ -150,7 +151,7 @@
       video.setAttribute('id', videoId);
       video.muted = "muted";
       if (!/iP(ad|od|hone)/i.test(navigator.userAgent)) {
-        var hls = new Hls();
+        hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
         hls.on(Hls.Events.MEDIA_ATTACHED, function () {
@@ -158,10 +159,11 @@
         });
       } else {
         video.setAttribute('src', url);
+        video.setAttribute('playsinline', 'true');
         video.addEventListener('loadedmetadata', function () {
-          if (selectedVideo) {
-            video.play();
-          }
+          // if (selectedVideo) {
+          video.play();
+          // }
         });
       }
 
@@ -195,11 +197,9 @@
 
     }
     function unloadVideos() {
-      videos.forEach((hls, i) => {
-        try {
-          hls.destroy()
-        } catch {
-
+      videos.forEach((video, i) => {
+        if (video.destroy) {
+          video.destroy()
         }
       });
       videos = [];
