@@ -149,7 +149,7 @@
       video.setAttribute('height', height);
       video.setAttribute('id', videoId);
       video.muted = "muted";
-      if (Hls.isSupported()) {
+      if (!/iP(ad|od|hone)/i.test(navigator.userAgent)) {
         var hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -157,8 +157,7 @@
           video.play();
         });
       } else {
-        console.info("Hello")
-        video.src = url;
+        video.setAttribute('src', url);
         video.addEventListener('loadedmetadata', function () {
           video.play();
         });
@@ -195,7 +194,11 @@
     }
     function unloadVideos() {
       videos.forEach((hls, i) => {
-        hls.destroy()
+        try {
+          hls.destroy()
+        } catch {
+
+        }
       });
       videos = [];
       var container = document.getElementById("videos")
