@@ -159,7 +159,9 @@
       } else {
         video.setAttribute('src', url);
         video.addEventListener('loadedmetadata', function () {
-          video.play();
+          if (selectedVideo) {
+            video.play();
+          }
         });
       }
 
