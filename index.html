@@ -167,6 +167,15 @@
           video.play();
           // }
         });
+        video.addEventListener('ended', () => {
+          // wait 10ms then play the video again manually
+          setTimeout(() => {
+            video.play().then(() => {
+              console.log('Video played');
+            }).catch((error) => {
+            console.log('Error calling play() on video', error);
+          });}, 10);
+        });
       }
 
       var timeout;
